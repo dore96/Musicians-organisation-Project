@@ -49,7 +49,7 @@ Musician*** make_empty_Musician_Collection_arr(int number_of_instruments)
 void shrinks_unnecessary_space_in_arrs(Musician*** MusicianCollection, int* instrument_players_counter, int number_of_instruments)
 {//function purpose is to shrink space or arrs in MusicianCollection.
 	int i;
-	for (i = NONE; i < number_of_instruments; i++)  //for every array in MusicianCollection.
+	for (i = 0; i < number_of_instruments; i++)  //for every array in MusicianCollection.
 	{//realloc by the logical size of the instrument pointers to players.
 		*(MusicianCollection + i) = realloc(*(MusicianCollection + i), (instrument_players_counter[i]) * sizeof(Musician*));
 		checkAllocation(*(MusicianCollection + i));
