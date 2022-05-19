@@ -1,12 +1,10 @@
 #pragma once
 #define _CRT_SECURE_NO_WARNINGS
-#define _CRTDBG_MAP_ALLOC
 #include <stdio.h>
 #include <stdbool.h>
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
-#include <crtdbg.h>
 #define MAX_LINE_LEN 150
 #define END_OF_LINE '\n'
 #define NONE 0

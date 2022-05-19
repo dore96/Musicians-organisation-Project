@@ -27,6 +27,5 @@ int main(int argc, char* argv[])
 	FileClosing(instrumentsFile, MusiciansFile);//closes files
 	free(musicianCollectionArraySizes);//free memory
 	freeAll(musicInstrumentsTree, MusiciansGroup, number_of_musicians, MusiciansCollection, numberOfInstruments);
-	_CrtDumpMemoryLeaks();
 	return 0;
 }

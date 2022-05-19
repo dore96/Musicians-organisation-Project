@@ -105,119 +105,120 @@ void insertInstrumentNodeToEnd(CIList* lst, ConcertInstrument* newTail)
 	}
 }
 void sort_musician_arrs(Musician*** MusiciansCollection, int* musicianCollectionArraySizes, Concert myConcert)
-{
+{//this function recives a pointer to the musicans collection and will sort the musicians of each instrument depending on the importance of the instrument in the inputted concert
 	ConcertInstrument* concert_ins_ptr = myConcert.instruments.head;
-	while (concert_ins_ptr)
+	while (concert_ins_ptr)//run on all instruments which will be in the inputted concers
 	{
-		currInst = concert_ins_ptr->inst;
-		pointerSort(MusiciansCollection[currInst], musicianCollectionArraySizes[currInst], concert_ins_ptr->importance);
-		concert_ins_ptr = concert_ins_ptr->next;
+		currInst = concert_ins_ptr->inst;//get instrument id
+		pointerSort(MusiciansCollection[currInst], musicianCollectionArraySizes[currInst], concert_ins_ptr->importance);//sort by importance
+		concert_ins_ptr = concert_ins_ptr->next;//go to next instrument
 	}
 }
 void pointerSort(Musician** arr, int size, char importance)
-{
-	if (importance == IMPORTANT)
+{//this function will sort the arr of musicians by importance
+	if (importance == IMPORTANT)//if important sort for highest price to lowesr
 	{
 		qsort(arr, size, sizeof(Musician*), compare1);
 	}
-	else
+	else//sort from lowest to highest
 	{
 		qsort(arr, size, sizeof(Musician*), compare2);
 	}
 }
 int compare1(const void* a, const void* b)
-{
+{//compare function for qsrot high to low
 	Musician** p1 = (Musician**)a;
 	Musician** p2 = (Musician**)b;
 	return (int)((*p2)->prices[currInst] - (*p1)->prices[currInst]);
 }
 int compare2(const void* a, const void* b)
-{
+{//compare function for qsrot low to high
 	Musician** p1 = (Musician**)a;
 	Musician** p2 = (Musician**)b;
 	return (int)((*p1)->prices[currInst] - (*p2)->prices[currInst]);
 }
 bool build_concert(Musician*** MusiciansCollection, int* musicianCollectionArraySizes, Concert myConcert, Musician*** musicians_for_concert)
-{
+{/*this function recives a pointer to musician collection an array of size of each musician array, a concert and will retrurn true of false if the concert
+ can be made or not and will return an array of the musicians that will be used of each instrument with the musician for concert pointer*/
 	ConcertInstrument* concert_ins_ptr = myConcert.instruments.head;
 	int num_curr_instrument, i, playersOnThisInstrumentTaken = 0, logical_size = 0, physical_size = 1;
 	*musicians_for_concert = (Musician**)malloc(sizeof(Musician*));
 	checkAllocation(*musicians_for_concert);
-	while (concert_ins_ptr)
+	while (concert_ins_ptr)//while still needs to go thorugh instrumnets that are needed for concert
 	{
-		num_curr_instrument = concert_ins_ptr->num;
-		if (num_curr_instrument > musicianCollectionArraySizes[concert_ins_ptr->inst])
+		num_curr_instrument = concert_ins_ptr->num;///get num of musicians needed from this instrument
+		if (num_curr_instrument > musicianCollectionArraySizes[concert_ins_ptr->inst])//if needed more than availbe return false
 		{
 			resetPlayers(*musicians_for_concert, logical_size);
 			return false;
 		}
-		for (i = 0; i < num_curr_instrument; i++)
+		for (i = 0; i < num_curr_instrument; i++)//else we will find the wanted musicians
 		{
-			if (logical_size == physical_size)
+			if (logical_size == physical_size)//if musicians for concert needs more space, we will expand it
 			{
 				physical_size *= 2;
 				*musicians_for_concert = realloc(*musicians_for_concert, (physical_size) * sizeof(Musician*));
 				checkAllocation(*musicians_for_concert);
 			}
-			while (MusiciansCollection[concert_ins_ptr->inst][i + playersOnThisInstrumentTaken]->is_playing)
+			while (MusiciansCollection[concert_ins_ptr->inst][i + playersOnThisInstrumentTaken]->is_playing)//this while loop will run until we will find the most sutible musician for this instrument who is availble
 			{
 				playersOnThisInstrumentTaken++;
-				if (playersOnThisInstrumentTaken + i >= musicianCollectionArraySizes[concert_ins_ptr->inst])
+				if (playersOnThisInstrumentTaken + i >= musicianCollectionArraySizes[concert_ins_ptr->inst])//if not enough availble musicians return false
 				{
-					resetPlayers(*musicians_for_concert, logical_size);
+					resetPlayers(*musicians_for_concert, logical_size);//reset players for next concert
 					return false;
 				}
 			}
-			MusiciansCollection[concert_ins_ptr->inst][i + playersOnThisInstrumentTaken]->is_playing = true;
-			*(*musicians_for_concert + logical_size) = MusiciansCollection[concert_ins_ptr->inst][i + playersOnThisInstrumentTaken];
+			MusiciansCollection[concert_ins_ptr->inst][i + playersOnThisInstrumentTaken]->is_playing = true;//set selected player to be playing
+			*(*musicians_for_concert + logical_size) = MusiciansCollection[concert_ins_ptr->inst][i + playersOnThisInstrumentTaken];//add him to the array in the right place
 			logical_size++;
 		}
-		concert_ins_ptr = concert_ins_ptr->next;
+		concert_ins_ptr = concert_ins_ptr->next;//go to next instrument
 		playersOnThisInstrumentTaken = NONE;
 	}
-	return true;
+	return true;//concert can be made
 }
 void print_concert(Concert myConcert, Musician** musicians_for_concert)
-{
+{//this function recives as input a concert and matrix of musicians of each instrument, it will print all the details and musicians which are playing in this concert
 	int i, players_so_far = NONE, j;
 	float totalPrice = NONE;
-	printf("Concert name: %s\n", myConcert.name);
-	printf("Concert date: %d/%d/%d\n", myConcert.date_of_concert.day, myConcert.date_of_concert.month, myConcert.date_of_concert.year);
-	printf("Concert time: %02d:%02d\n", (int)myConcert.date_of_concert.hour, (int)((myConcert.date_of_concert.hour - (int)myConcert.date_of_concert.hour) * 60));
+	printf("Concert name: %s\n", myConcert.name);//prints concert name
+	printf("Concert date: %02d/%02d/%04d\n", myConcert.date_of_concert.day, myConcert.date_of_concert.month, myConcert.date_of_concert.year);//print date
+	printf("Concert time: %02d:%02d\n", (int)myConcert.date_of_concert.hour, (int)((myConcert.date_of_concert.hour - (int)myConcert.date_of_concert.hour) * 60));//print time
 	printf("Concert players:\n");
 	ConcertInstrument* concert_ins_ptr = myConcert.instruments.head;
-	while (concert_ins_ptr)
+	while (concert_ins_ptr)//run on all instruments that are needed for this concert
 	{
-		for (i = 0; i < concert_ins_ptr->num; i++)
+		for (i = 0; i < concert_ins_ptr->num; i++)//run on the number of players needed for this instrument
 		{
-			printf("Player number %d: ", players_so_far + 1);
-			for (j = 0; j < musicians_for_concert[players_so_far + i]->number_of_names; j++)
+			printf("Player number %d: ", players_so_far + 1);//print player number
+			for (j = 0; j < musicians_for_concert[players_so_far + i]->number_of_names; j++)//print all his names
 			{
 				printf("%s ", musicians_for_concert[players_so_far + i]->name[j]);
 			}
-			printf("playing the %s ", concert_ins_ptr->instrument_name);
-			printf("price - %.2f\n", musicians_for_concert[players_so_far + i]->prices[concert_ins_ptr->inst]);
-			totalPrice += musicians_for_concert[players_so_far + i]->prices[concert_ins_ptr->inst];
-			(musicians_for_concert[players_so_far + i])->is_playing = false;
+			printf("playing the %s ", concert_ins_ptr->instrument_name);//print instrument name
+			printf("price - %.2f\n", musicians_for_concert[players_so_far + i]->prices[concert_ins_ptr->inst]);//print price he is taking
+			totalPrice += musicians_for_concert[players_so_far + i]->prices[concert_ins_ptr->inst];//add his price to total price
+			(musicians_for_concert[players_so_far + i])->is_playing = false;//set him to be active for next concert
 		}
-		players_so_far += i;
-		concert_ins_ptr = concert_ins_ptr->next;
+		players_so_far += i;//increase player number
+		concert_ins_ptr = concert_ins_ptr->next;//go to next instrument
 	}
-	printf("Total price of concert: %.2f\n\n", totalPrice);
+	printf("Total price of concert: %.2f\n\n", totalPrice);//print total price of concert
 }
 void resetPlayers(Musician** players, int size)
-{
+{//this function will reset all platers in the array to be available and in not playing mode
 	int i;
 	for (i = 0; i < size; i++)
 		players[i]->is_playing = false;
 }
 void freeConcertInstrumentList(CIList lst)
-{
+{//free list of instrument for the concert
 	ConcertInstrument* p = NULL, * q = NULL;
 	if (lst.head == NULL)
 		return;
 	p = lst.head;
-	while (p->next != NULL)
+	while (p->next != NULL)//run until the last instrument that needs to be freed
 	{
 		q = p;
 		p = p->next;

@@ -17,7 +17,7 @@ void make_double_space(int* size, void*** arr)
 	*arr = realloc(*arr, *size * sizeof(void*));
 	checkAllocation(arr);
 }
-//hi gil
+
 void checkFileOpening(FILE* file, char* argv)
 {//checks if file has opened successfully
 	if (file == NULL)
