@@ -3,7 +3,7 @@ The project handles a database of musicians for performances, which is received 
 The purpose of the program is to organize performances by assigning musicians from the pool to the performances.
 
 A study project that handels many data structures such as trees , linked list and files in c.
-The project is a first collaboration project between two software developers as part of a course.
+The project is a first collaboration project between two software developers as part of the course.
 
 ## Getting Started
 
