@@ -20,10 +20,10 @@ You will need:
 ### Installing
 
 It is fairly easy to install the project, all you need to do is clone if from
-[GitHub](https://github.com/dore96/Musicians-organisation-Project---study-project) or you can simply need to run:
+[GitHub](https://github.com/dore96/Musicians-organisation-Project) or you can simply need to run:
 
 ```bash
-git clone https://github.com/dore96/Musicians-organisation-Project---study-project/
+git clone https://github.com/dore96/Musicians-organisation-Project/
 ```
 
 ## Authors
