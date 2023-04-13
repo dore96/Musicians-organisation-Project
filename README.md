@@ -1,4 +1,4 @@
-## About the project
+## About the project 🎵🎶🎸
 The project handles a database of musicians for performances, which is received in a text file from the user in a certain configuration (see the demands file).
 The purpose of the program is to organize performances by assigning musicians from the pool to the performances.
 
